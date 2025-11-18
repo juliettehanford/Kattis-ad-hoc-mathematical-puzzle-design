@@ -2,6 +2,7 @@
 \usepackage{amsmath, amssymb}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{multicol}
 
 % Define \problemname and \illustration if not using Kattis template
 \newcommand{\problemname}[1]{\section*{#1}}
@@ -15,29 +16,79 @@
 
 \begin{document}
 
-\problemname{Title of the Problem Here}
+\problemname{Prefix Firewall}
 
 % Example use of the \illustration command
 % \illustration{0.3}{filename.jpg}{Photo by \href{url_here}{link text here, e.g. author name}}
 
-Put the problem story here. Here are some common issues to keep in mind as you edit:
+You are a grey-hat hacker trying to identify security vulnerabilities in system firewalls. Each system you probe protects itself with a numeric firewall: a list of passcodes, one per line. A system is considered secure if every passcode in its firewall is polydivisible.
+\\
 
+\noindent A positive integer is polydivisible if each of its prefixes is divisible by its own length.
+For example:
 \begin{itemize}
-    \item Use \LaTeX{} math mode for (most) numbers. The few exceptions are for years (e.g., 2019) or whenever a number is part of a string token.
-    \item For numbers $1\,000$ or larger, use thousands separator \verb|\,|. So, for example, one million would be $1\,000\,000$.
-    \item Write in active voice (i.e., avoid passive voice).
-    \item Write in present tense (avoid the word \texttt{will}, especially in the input description). For example, prefer: ``Input starts with an integer $n$ followed by $n$ lines...'' rather than ``Input \emph{will} start with an integer $n$, then \emph{will} come $n$ lines...''.
+    \item $381\,654\,729$ is polydivisible because each prefix length divides evenly:  
+    $3 \bmod 1 = 0$, $38 \bmod 2 = 0$, $381 \bmod 3 = 0$, and so on.
+    \item $26\,158$ is not polydivisible: although the first three prefixes ($2$, $26$, and $261$) are valid,  
+    the fourth prefix $2615$ is not divisible by $4$.
+    \item Any single-digit number is always polydivisible, since every integer is divisible by $1$.
 \end{itemize}
 
 \section*{Input}
 
-Put the input format (syntax) description here, including constraints on all input values. That includes number ranges, the maximum number of digits after the decimal point for real values, the character sets and length ranges for strings, etc. If possible, always give a count of the number of items that follow (test cases, e.g.) rather than delimiting with a token or EOF. The input format should be fairly precise, so that the reader knows exactly what to expect (it should usually be easy to write a program to read the input using line-oriented or token-oriented parsing).
+Each input consists of one test case, representing a single secure system. The first line contains an integer $n$ ($1 \le n \le 1\,000$), the number of passcodes in the firewall. Each of the next $n$ lines contains one passcode, a positive integer consisting of between $1$ and $20$ digits (inclusive).
 
 \section*{Output}
 
-Describe the output. Kattis output judging is not sensitive to case changes or space changes (including line formatting and blank lines). Try to maintain this flexibility with your problem—do not be overly precise or prescriptive here in the output formatting description. However, if exact textual matching or floating-point precision is required, do specify the constraints (e.g., ``your answer should be correct within a relative or absolute error of $10^{-3}$'').
+If every passcode line is polydivisible, output that the firewall is secure.  \\
+If the firewall is not secure, print each non-polydivisible passcode in the order in which it appears.
 
-\section*{Sample Input 1	Sample Output 1}
-Please provide at least one sample Input and Output for your problem.
+\begin{multicols}{2}
+\subsection*{Sample Input 1}
+\begin{verbatim}
+4
+381654729
+26
+58
+6
+\end{verbatim}
+\columnbreak
+\subsection*{Sample Output 1}
+\begin{verbatim}
+not secure
+26
+58
+\end{verbatim}
+\end{multicols}
 
+\begin{multicols}{2}
+\subsection*{Sample Input 2}
+\begin{verbatim}
+3
+381654729
+6
+8
+\end{verbatim}
+\columnbreak
+\subsection*{Sample Output 2}
+\begin{verbatim}
+secure
+\end{verbatim}
+\end{multicols}
+
+\begin{multicols}{2}
+\subsection*{Sample Input 3}
+\begin{verbatim}
+2
+10
+12
+\end{verbatim}
+\columnbreak
+\subsection*{Sample Output 3}
+\begin{verbatim}
+not secure
+10
+12
+\end{verbatim}
+\end{multicols}
 \end{document}
