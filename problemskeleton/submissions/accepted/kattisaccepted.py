@@ -1,6 +1,6 @@
 import sys
 
-data = sys.stdin.read().strip().split()
+data = sys.stdin.read().strip().split() #Read all at once for efficiency
 n = int(data[0])
 
 idx = 1
@@ -12,8 +12,8 @@ for _ in range(n):
 
     val = 0
     ok = True
-    for i, ch in enumerate(s, start=1):
-        val = val * 10 + int(ch)
+    for i, ch in enumerate(s, start=1): #Use enumerate to generate a counter alongside the character for modulo operation
+        val = val * 10 + int(ch) #Use carry-forward logic instead of rebuilding the prefix every time using basic principle of base 10 numbers
         if val % i != 0:
             ok = False
             break
