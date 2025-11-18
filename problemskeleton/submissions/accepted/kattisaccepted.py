@@ -12,9 +12,9 @@ for _ in range(n):
 
     val = 0
     ok = True
-    for i, ch in enumerate(s, start=1): #Use enumerate to generate a counter alongside the character for modulo operation
-        val = val * 10 + int(ch) #Use carry-forward logic instead of rebuilding the prefix every time using basic principle of base 10 numbers
-        if val % i != 0:
+    for i, ch in enumerate(s, start=1):     # Use enumerate to generate a counter alongside the character for modulo operation
+        val = val * 10 + int(ch)            # Use carry-forward logic instead of rebuilding the prefix every time using basic principle of base 10 numbers
+        if val % i != 0:                    # Due to this logic, runtime of O(n * L) where L is length of string
             ok = False
             break
 
