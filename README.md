@@ -1,0 +1,1 @@
+# Kattis-ad-hoc-mathematical-puzzle-design
