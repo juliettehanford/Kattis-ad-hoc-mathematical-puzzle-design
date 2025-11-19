@@ -31,9 +31,9 @@ int main() {
     }
 
     if (bad.empty()) {
-        cout << "Firewall is secure!\n";
+        cout << "secure\n";
     } else {
-        cout << "Vulnerabilities detected:\n";
+        cout << "not secure\n";
         for (auto &x : bad) cout << x << "\n";
     }
 
