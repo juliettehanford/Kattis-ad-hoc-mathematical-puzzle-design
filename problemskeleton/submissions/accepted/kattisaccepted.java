@@ -30,9 +30,9 @@ public class kattisaccepted {
         }
 
         if (bad.isEmpty()) {
-            System.out.println("Firewall is secure!");
+            System.out.println("secure");
         } else {
-            System.out.println("Vulnerabilities detected:");
+            System.out.println("not secure");
             for (String b : bad) System.out.println(b);
         }
     }

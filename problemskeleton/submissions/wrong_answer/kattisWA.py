@@ -20,7 +20,7 @@ for _ in range(n):
         bad.append(s)
 
 if not bad:
-    print("Firewall is secure!")
+    print("secure")
 else:
-    print("Vulnerabilities detected:")
+    print("not secure")
     print("\n".join(bad))
