@@ -8,9 +8,9 @@ bad = []
 
 for _ in range(n):
     s = data[idx]
-    idx += 1
+    idx += 1                                # Use manual incrementation so on last (n-1) line, increment again for n'th line
 
-    val = 0
+    val = 0                                 # Initialize carry-forward value to 0
     ok = True
     for i, ch in enumerate(s, start=1):     # Use enumerate to generate a counter alongside the character for modulo operation
         val = val * 10 + int(ch)            # Use carry-forward logic instead of rebuilding the prefix every time using basic principle of base 10 numbers
