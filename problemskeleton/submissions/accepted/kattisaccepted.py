@@ -1,6 +1,6 @@
 import sys
 
-data = sys.stdin.read().strip().split() #Read all at once for efficiency
+data = sys.stdin.read().strip().split()     #Read all at once for efficiency
 n = int(data[0])
 
 idx = 1

@@ -12,9 +12,9 @@ for _ in range(n):
 
     ok = True
     for i in range(1, len(s) + 1):
-        prefix = s[:i]        # Copies substring
-        val = int(prefix)     # Parses substring and converts to int
-        if val % i != 0:      # runtime is suboptimal - O(n * L^2) due to repeated parsing of prefix
+        prefix = s[:i]              # Copies substring
+        val = int(prefix)           # Parses substring and converts to int
+        if val % i != 0:            # runtime is suboptimal - O(n * L^2) due to repeated parsing of prefix
             ok = False
             break
 
