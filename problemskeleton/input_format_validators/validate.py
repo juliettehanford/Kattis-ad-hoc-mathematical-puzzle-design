@@ -10,25 +10,16 @@ import re
 
 n_line = sys.stdin.readline()
 print(repr(n_line)) # useful for debugging to see where we have read
-assert re.match('^[1-9][0-9]*\n$', n_line) # note: no leading zeros
+assert re.match('^[1-9][0-9]*\n$', n_line) # first line must be an integer with no leading zeros
 n = int(n_line)
-assert 1 <= n <= 100
+assert 1 <= n <= 1000 # n is positive, there are ≤1000 passcodes in the firewall
 
-unique_strings = set()
 for _ in range(n):
     case_line = sys.stdin.readline()
     print(repr(case_line)) # useful for debugging to see where we have read
-    # check the line syntax (string, integer, real)
-    assert re.match('^[a-z]{1,20} (0|-?[1-9][0-9]{0,2}) (0|-?[1-9][0-9]?)(\.[0-9]{1,3})?\n$', case_line)
 
-    # parse the line
-    s, i, f = case_line.split()
-    assert -100 <= int(i) <= 100
-    assert -10.0 <= float(f) <= 10.0
-
-    # verify string uniqueness
-    assert s not in unique_strings
-    unique_strings.add(s)
+    # each passcode must be a positive integer, 1–20 digits, no leading zeros
+    assert re.match('^[1-9][0-9]{0,19}\n$', case_line)
 
 # ensure no extra input
 assert sys.stdin.readline() == ''
