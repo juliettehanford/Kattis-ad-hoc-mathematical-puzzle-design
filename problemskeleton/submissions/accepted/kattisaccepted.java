@@ -10,15 +10,15 @@ public class kattisaccepted {
         List<String> bad = new ArrayList<>();
         int n = Integer.parseInt(br.readLine().trim());
 
-        for (int k = 0; k < n; k++) { // For n lines in firewall
+        for (int k = 0; k < n; k++) {                                             // For n lines in firewall
             String s = br.readLine().trim();
 
             long val = 0;
             boolean ok = true;
 
-            for (int i = 1; i <= s.length(); i++) { // For each line, analyze all characters and check polydivisibility
+            for (int i = 1; i <= s.length(); i++) {                               // For each line, analyze all characters and check polydivisibility
                 int digit = s.charAt(i - 1);
-                val = val * 10 + Character.getNumericValue(digit); // Use same carry-forward logic as Python implementation using basic principles base 10 numbers
+                val = val * 10 + Character.getNumericValue(digit);                // Use same carry-forward logic as Python implementation using basic principles base 10 numbers
 
                 if (val % i != 0) {
                     ok = false;
