@@ -2,15 +2,7 @@
 import os
 import random
 
-# ============================================================
-# CONSTANT: Longest-known base-10 polydivisible number
-# ============================================================
-FORCED = "3608528850368400786036725"   # 25 digits
-
-
-# ============================================================
-# Utility: Polydivisible Checker
-# ============================================================
+# Functions based on ideal kattisaccepted.py
 def is_polydivisible(s):
     val = 0
     for i, ch in enumerate(s, start=1):
@@ -27,43 +19,118 @@ def evaluate_firewall(codes):
     return "not secure\n" + "\n".join(bad) + "\n"
 
 
-# ============================================================
-# Insecure generators
-# ============================================================
-def random_passcode(min_len=2, max_len=30):
-    """Random number, not guaranteed to be insecure."""
+# Generate polydivisible numbers using backtracking search
+def generate_polydivisible_numbers(max_len=20, limit=5000):
+    results = []
+
+    def backtrack(prefix_val, prefix_str, length):
+        if len(results) >= limit:
+            return
+        if length > 0:
+            results.append(prefix_str)
+        if length == max_len:
+            return
+
+        start_digit = 1 if length == 0 else 0
+        for d in range(start_digit, 10):
+            new_val = prefix_val * 10 + d
+            new_len = length + 1
+            if new_val % new_len == 0:
+                backtrack(new_val, prefix_str + str(d), new_len)
+
+    backtrack(0, "", 0)
+    return results
+
+POLYDIVISIBLE_NUMS = generate_polydivisible_numbers()
+
+
+# Random passcode generation for stress-test
+def random_passcode(min_len=1, max_len=20):
     L = random.randint(min_len, max_len)
     digits = [str(random.randint(1, 9))]
     digits += [str(random.randint(0, 9)) for _ in range(L - 1)]
     return "".join(digits)
 
-
-def random_insecure(min_len=2, max_len=50):
-    """Guaranteed to break polydivisibility early."""
+# Guaranteed incorrect passcode using random generation
+def random_insecure(min_len=1, max_len=5000):
     while True:
         s = random_passcode(min_len, max_len)
         if not is_polydivisible(s):
             return s
 
 
-# ============================================================
-# File output
-# ============================================================
+# Use backtracking search until fail point and then fill with random numbers for very large L sizes
+def generate_near_polydivisible(target_len=3000):
+    fail_point = random.randint(target_len // 2, target_len - 1)
+
+    digits = []
+    prefix_val = 0
+
+    for i in range(1, target_len + 1):
+        if i < fail_point:
+            found = False
+            for d in range(10):
+                if i == 1 and d == 0:
+                    continue
+                new_val = prefix_val * 10 + d
+                if new_val % i == 0:
+                    digits.append(str(d))
+                    prefix_val = new_val
+                    found = True
+                    break
+
+            if not found:
+                d = random.randint(1 if i == 1 else 0, 9)
+                digits.append(str(d))
+                prefix_val = prefix_val * 10 + d
+
+        else:
+            d = random.randint(0, 9)
+            if i == 1 and d == 0:
+                d = 1
+            digits.append(str(d))
+            prefix_val = prefix_val * 10 + d
+
+    return "".join(digits)
+
+
+# Case creation using modes, standard = mixed, can also specify all insecure codes or all secure codes for specific testing criteria
+def make_case(num_codes, mode="mixed"):
+    if mode == "all_secure":
+        return random.sample(POLYDIVISIBLE_NUMS, num_codes)
+
+    if mode == "all_insecure":
+        return [random_insecure(1000, 5000) for _ in range(num_codes)]
+
+    if mode == "mixed":
+        out = []
+        for _ in range(num_codes):
+            if random.random() < 0.3:
+                out.append(random.choice(POLYDIVISIBLE_NUMS))
+            elif random.random() < 0.5:
+                out.append(random_insecure(1000, 5000))
+            else:
+                out.append(generate_near_polydivisible(target_len=random.randint(1500, 3000)))
+        return out
+
+    raise ValueError("Unknown mode: " + mode)
+
+
+# Function to write matching .in and .ans pairs into files
 def write_case(base_path, name, codes):
     in_path = os.path.join(base_path, name + ".in")
     ans_path = os.path.join(base_path, name + ".ans")
 
     with open(in_path, "w") as f:
         f.write(str(len(codes)) + "\n")
-        f.write("\n".join(codes) + "\n")
+        for s in codes:
+            f.write(s + "\n")
 
     with open(ans_path, "w") as f:
         f.write(evaluate_firewall(codes))
 
 
-# ============================================================
-# Main generator
-# ============================================================
+
 def main():
     random.seed(1234)
 
@@ -74,92 +141,78 @@ def main():
     os.makedirs(sample, exist_ok=True)
     os.makedirs(secret, exist_ok=True)
 
-    # ---------------------------------------------------------
-    # SAMPLE TESTS — unchanged from statement
-    # ---------------------------------------------------------
+    # Hard-coded sample tests from problem statement
     samples = [
         ("sample1", ["381654729", "26", "58", "6"]),
-        ("sample2", ["381654729", "6", "8"]),
-        ("sample3", ["10", "12"]),
-        ("sample4", ["38", "1", "123"]),
+        ("sample2", ["381654729", "63", "8"]),
+        ("sample3", ["38", "1", "123"]),
     ]
     for name, codes in samples:
         write_case(sample, name, codes)
 
-    # ---------------------------------------------------------
-    # SECRET TESTS (exactly 20)
-    # ---------------------------------------------------------
+    # Secret tests
     sid = 1
 
-    # 1. SINGLE FORCED (correctness)
-    write_case(secret, f"secret{sid}", [FORCED])
-    sid += 1
-
-    # 2. SMALL MIXED WITH FORCED FIRST
-    write_case(secret, f"secret{sid}",
-                [FORCED, random_insecure(), random_insecure(), random_passcode()])
-    sid += 1
-
-    # 3–5. MEDIUM MIXED, FORCED FIRST
-    for _ in range(3):
-        codes = [FORCED] + [random_insecure() for _ in range(20)]
-        write_case(secret, f"secret{sid}", codes)
+    # 1 + 2. Small correctness tests
+    for n in [1, 3]:
+        write_case(secret, f"secret{sid}", make_case(n, "mixed"))
         sid += 1
 
-    # 6–8. BIG-N MIXED (n = 1000), FORCED FIRST
-    for _ in range(3):
-        codes = [FORCED] + [random_insecure(5, 50) for _ in range(999)]
-        write_case(secret, f"secret{sid}", codes)
+    # 3 + 4. All-secure small/medium
+    for n in [5, 20]:
+        write_case(secret, f"secret{sid}", make_case(n, "all_secure"))
         sid += 1
 
-    # 9. ALL-FORCED 1000 times
-    codes = [FORCED] * 1000
-    write_case(secret, f"secret{sid}", codes)
+    # 5. All-insecure medium
+    write_case(secret, f"secret{sid}", make_case(10, "all_insecure"))
     sid += 1
 
-    # 10. FORCED + EXTRA DIGIT (e.g., FORCED+"7") repeated 1000 times
-    codes = [FORCED + str(random.randint(1, 9)) for _ in range(1000)]
-    write_case(secret, f"secret{sid}", codes)
-    sid += 1
-
-    # 11–12. LONG NUMBER STRESS, FORCED FIRST
-    # (random length ~2000)
+    # 6 + 7. Near-polydivisible stress tests (long numbers, n=5)
     for _ in range(2):
-        codes = [FORCED] + [
-            random_insecure(500, 2000) for _ in range(10)
-        ]
+        codes = [generate_near_polydivisible(target_len=random.randint(2000, 4000)) for _ in range(5)]
         write_case(secret, f"secret{sid}", codes)
         sid += 1
 
-    # 13–15. MIXED WITH MULTIPLE FORCED INSERTIONS
-    for _ in range(3):
-        codes = []
-        for i in range(40):
-            if i % 7 == 0:
-                codes.append(FORCED)
-            else:
-                codes.append(random_insecure())
-        write_case(secret, f"secret{sid}", codes)
+    # 8 - 11. Large n-tests for stress-testing performance
+    write_case(secret, f"secret{sid}", 
+        [random.choice(POLYDIVISIBLE_NUMS) if random.random() < 0.3 
+         else random_insecure(5, 50) 
+         for _ in range(800)])
+    sid += 1
+
+    write_case(secret, f"secret{sid}", 
+        [random.choice(POLYDIVISIBLE_NUMS) if random.random() < 0.3
+         else random_insecure(5, 50)
+         for _ in range(1000)])
+    sid += 1
+
+    
+    write_case(secret, f"secret{sid}", 
+        [random_insecure(5, 50) for _ in range(1000)])
+    sid += 1
+
+    
+    write_case(secret, f"secret{sid}",
+        random.sample(POLYDIVISIBLE_NUMS, min(500, len(POLYDIVISIBLE_NUMS))))
+    sid += 1
+
+    # 12 + 13. Large mixed
+    for _ in range(2):
+        write_case(secret, f"secret{sid}", 
+            [random.choice(POLYDIVISIBLE_NUMS) if random.random() < 0.3
+             else random_insecure(5, 50)
+             for _ in range(1000)])
         sid += 1
 
-    # 16–19. RANDOM MIXED (FORCED RANDOMLY INSERTED)
-    for _ in range(4):
-        codes = []
-        n = random.randint(30, 60)
-        forced_positions = random.sample(range(n), k=random.randint(3, 6))
-        for i in range(n):
-            if i in forced_positions:
-                codes.append(FORCED)
-            else:
-                codes.append(random_insecure(2, 40))
-        write_case(secret, f"secret{sid}", codes)
+    # 14 + 15. Mixed medium-sized tests
+    for _ in range(2):
+        write_case(secret, f"secret{sid}", make_case(40, "mixed"))
         sid += 1
 
-    # 20. FINAL LARGE-N FULL MIX (forced first)
-    codes = [FORCED] + [
-        random_insecure(2, 40) for _ in range(999)
-    ]
-    write_case(secret, f"secret{sid}", codes)
+    # 16 - 20. Mixed remaining tests
+    while sid <= 20:
+        write_case(secret, f"secret{sid}", make_case(random.randint(20, 40), "mixed"))
+        sid += 1
 
 
 if __name__ == "__main__":
