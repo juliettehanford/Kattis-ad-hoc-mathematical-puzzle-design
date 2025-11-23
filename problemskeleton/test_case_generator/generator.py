@@ -144,7 +144,7 @@ def main():
     # Hard-coded sample tests from problem statement
     samples = [
         ("sample1", ["381654729", "26", "58", "6"]),
-        ("sample2", ["381654729", "63", "8"]),
+        ("sample2", ["325","381654729", "63", "8"]),
         ("sample3", ["38", "1", "123"]),
     ]
     for name, codes in samples:
