@@ -26,3 +26,4 @@ if not bad:
 else:
     print("not secure")
     print("\n".join(bad))
+    
