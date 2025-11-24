@@ -18,8 +18,8 @@
 
 \problemname{Prefix Firewall}
 
-% Example use of the \illustration command
-% \illustration{0.3}{filename.jpg}{Photo by \href{url_here}{link text here, e.g. author name}}
+\illustration{0.3}{problem_statement/firewall_image.png}
+% {Photo by \href{url_here}{link text here, e.g. author name}}
 
 You are a grey-hat hacker trying to identify security vulnerabilities in system firewalls. Each system you probe protects itself with a numeric firewall: a list of passcodes, one per line. A system is considered secure if every passcode in its firewall is polydivisible.
 \\
@@ -36,75 +36,69 @@ For example:
 
 \section*{Input}
 
-Each input consists of one test case, representing a single secure system. The first line contains an integer $n$ ($1 \le n \le 1\,000$), the number of passcodes in the firewall. Each of the next $n$ lines contains one passcode, a positive integer consisting of between $1$ and $20$ digits (inclusive).
+Each input consists of one test case, representing a single secure system. The first line contains an integer $n$ ($1 \le n \le 1\,000$), the number of passcodes in the firewall. Each of the next $n$ lines contains one passcode, a positive integer consisting of between $1$ and $25$ digits (inclusive).
 
 \section*{Output}
 
 If every passcode line is polydivisible, output that the firewall is secure.  \\
-If the firewall is not secure, print each non-polydivisible passcode in the order in which it appears.
+If the firewall is not secure, print "not secure" followed by each non-polydivisible passcode in the order in which it appears.
 
-\begin{multicols}{2}
+
+\noindent \newline \newline
+\begin{minipage}[t]{0.48\textwidth}
 \subsection*{Sample Input 1}
 \begin{verbatim}
+5
 4
 381654729
 26
 58
 6
 \end{verbatim}
-\columnbreak
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
 \subsection*{Sample Output 1}
-\begin{verbatim}
-not secure
-26
-58
-\end{verbatim}
-\end{multicols}
-
-\begin{multicols}{2}
-\subsection*{Sample Input 2}
-\begin{verbatim}
-3
-381654729
-6
-8
-\end{verbatim}
-\columnbreak
-\subsection*{Sample Output 2}
 \begin{verbatim}
 secure
 \end{verbatim}
-\end{multicols}
+\end{minipage}
 
-\begin{multicols}{2}
-\subsection*{Sample Input 3}
+\noindent \newline \newline
+\begin{minipage}[t]{0.48\textwidth}
+\subsection*{Sample Input 2}
 \begin{verbatim}
-2
-10
-12
+4
+325
+381654729
+63
+8
 \end{verbatim}
-\columnbreak
-\subsection*{Sample Output 3}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\subsection*{Sample Output 2}
 \begin{verbatim}
 not secure
-10
-12
+325
+63
 \end{verbatim}
-\end{multicols}
+\end{minipage}
 
-\begin{multicols}{2}
+\noindent \newline \newline
+\begin{minipage}[t]{0.48\textwidth}
 \subsection*{Sample Input 3}
 \begin{verbatim}
+4
 3
 38
 1
 123
 \end{verbatim}
-\columnbreak
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
 \subsection*{Sample Output 3}
 \begin{verbatim}
 secure
 \end{verbatim}
-\end{multicols}
+\end{minipage}
 
 \end{document}
