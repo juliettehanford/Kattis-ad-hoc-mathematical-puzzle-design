@@ -18,8 +18,8 @@ for _ in range(n):
     case_line = sys.stdin.readline()
     print(repr(case_line)) # useful for debugging to see where we have read
 
-    # each passcode must be a positive integer, 1–20 digits, no leading zeros
-    assert re.match('^[1-9][0-9]{0,19}\n$', case_line)
+    # each passcode must be a positive integer, 1–25 digits, no leading zeros
+    assert re.match('^[1-9][0-9]{0,24}\n$', case_line)
 
 # ensure no extra input
 assert sys.stdin.readline() == ''
