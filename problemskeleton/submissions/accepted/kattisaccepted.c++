@@ -13,14 +13,15 @@ int main() {
         string s;                                   // Must decide if switch to big-integer or limit problem size to 18 digits to allow val to work
         cin >> s;
 
-        long long val = 0;
+        int residual = 0;
         bool ok = true;
 
         for (int i = 1; i <= (int)s.size(); i++) {
             int digit = s[i - 1] - '0';
-            val = val * 10 + digit;
+            residual = (residual * 10 + digit) % 2520;
+            int m = ((i - 1) % 10) + 1;
 
-            if (val % i != 0) {
+            if (residual % m != 0) {
                 ok = false;
                 break;
             }
