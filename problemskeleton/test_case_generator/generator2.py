@@ -26,7 +26,7 @@ def evaluate_firewall(codes):
 
 
 # Generate polydivisible numbers using backtracking search
-def generate_polydivisible_numbers(max_len=25, limit=5000):
+def generate_polydivisible_numbers(max_len=100, limit=5000):
     results = []
 
     def backtrack(prefix_residual, prefix_str, length):
@@ -154,9 +154,9 @@ def main():
 
     # Hard-coded sample tests from problem statement
     samples = [
-        ("sample1", ["381654729", "26", "58", "6"]),
+        ("sample1", ["38165472", "4", "666450405060", "26"]),
         ("sample2", ["325","381654729", "63", "8"]),
-        ("sample3", ["38", "1", "123"]),
+        ("sample3", ["1", "38", "123"]),
     ]
     for name, codes in samples:
         write_case(sample, name, codes)
