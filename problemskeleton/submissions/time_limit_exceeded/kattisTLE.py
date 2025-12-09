@@ -11,10 +11,12 @@ for _ in range(n):
     idx += 1
 
     ok = True
+    # For each prefix length, copy substring and convert to int
     for i in range(1, len(s) + 1):
-        prefix = s[:i]              # Copies substring
-        val = int(prefix)           # Parses substring and converts to int
-        if val % i != 0:            # runtime is suboptimal - O(n * L^2) due to repeated parsing of prefix
+        prefix = s[:i]                  # copies substring -> O(L)
+        val = int(prefix)               # parses substring -> O(L) big-int work for long prefixes
+        m = ((i - 1) % 10) + 1
+        if val % m != 0:                # runtime is suboptimal - O(n * L^2) due to repeated parsing of prefix
             ok = False
             break
 
