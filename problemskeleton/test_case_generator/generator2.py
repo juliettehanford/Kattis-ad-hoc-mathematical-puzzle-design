@@ -26,7 +26,7 @@ def evaluate_firewall(codes):
 
 
 # Generate polydivisible numbers using backtracking search
-def generate_polydivisible_numbers(max_len=100, limit=5000):
+def generate_polydivisible_numbers(max_len=25, limit=1000):
     results = []
 
     def backtrack(prefix_residual, prefix_str, length):
@@ -53,7 +53,7 @@ POLYDIVISIBLE_NUMS = generate_polydivisible_numbers()
 
 
 # Random passcode generation for stress-test
-def random_passcode(min_len=1, max_len=20):
+def random_passcode(min_len=1, max_len=5000):
     L = random.randint(min_len, max_len)
     digits = [str(random.randint(1, 9))]
     digits += [str(random.randint(0, 9)) for _ in range(L - 1)]
@@ -68,7 +68,7 @@ def random_insecure(min_len=1, max_len=5000):
 
 
 # Use backtracking search until fail point and then fill with random numbers for very large L sizes
-def generate_near_polydivisible(target_len=3000):
+def generate_near_polydivisible(target_len=5000):
     fail_point = random.randint(max(1, target_len // 2), max(1, target_len - 1))
 
     digits = []
@@ -123,7 +123,7 @@ def make_case(num_codes, mode="mixed"):
             elif r < 0.6:
                 out.append(random_insecure(1000, 5000))
             else:
-                out.append(generate_near_polydivisible(target_len=random.randint(1500, 3000)))
+                out.append(generate_near_polydivisible(target_len=random.randint(1000, 5000)))
         return out
 
     raise ValueError("Unknown mode: " + mode)
@@ -180,7 +180,7 @@ def main():
 
     # 6 + 7. Near-polydivisible stress tests (long numbers, n=5)
     for _ in range(2):
-        codes = [generate_near_polydivisible(target_len=random.randint(2000, 4000)) for _ in range(5)]
+        codes = [generate_near_polydivisible(target_len=random.randint(1000, 5000)) for _ in range(5)]
         write_case(secret, f"secret{sid}", codes)
         sid += 1
 
