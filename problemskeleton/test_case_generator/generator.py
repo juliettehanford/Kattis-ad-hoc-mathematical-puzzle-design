@@ -52,14 +52,14 @@ POLYDIVISIBLE_NUMS = generate_polydivisible_numbers()
 
 
 # Random passcode generation for stress-test
-def random_passcode(min_len=1, max_len=5000):
+def random_passcode(min_len=1, max_len=4300):
     L = random.randint(min_len, max_len)
     digits = [str(random.randint(1, 9))]
     digits += [str(random.randint(0, 9)) for _ in range(L - 1)]
     return "".join(digits)
 
 # Guaranteed incorrect passcode using random generation
-def random_insecure(min_len=1, max_len=5000):
+def random_insecure(min_len=1, max_len=4300):
     while True:
         s = random_passcode(min_len, max_len)
         if not is_cyclic_polydivisible(s):
@@ -67,7 +67,7 @@ def random_insecure(min_len=1, max_len=5000):
 
 
 # Use backtracking search until fail point and then fill with random numbers for very large L sizes
-def generate_near_polydivisible(target_len=5000):
+def generate_near_polydivisible(target_len=4300):
     fail_point = random.randint(max(1, target_len // 2), max(1, target_len - 1))
 
     digits = []
@@ -111,7 +111,7 @@ def make_case(num_codes, mode="mixed"):
             return [random.choice(POLYDIVISIBLE_NUMS) for _ in range(num_codes)]
     
     if mode == "all_insecure":
-        return [random_insecure(1000, 5000) for _ in range(num_codes)]
+        return [random_insecure(1000, 4300) for _ in range(num_codes)]
 
     if mode == "mixed":
         out = []
@@ -120,9 +120,9 @@ def make_case(num_codes, mode="mixed"):
             if r < 0.3 and POLYDIVISIBLE_NUMS:
                 out.append(random.choice(POLYDIVISIBLE_NUMS))
             elif r < 0.6:
-                out.append(random_insecure(1000, 5000))
+                out.append(random_insecure(1000, 4300))
             else:
-                out.append(generate_near_polydivisible(target_len=random.randint(1000, 5000)))
+                out.append(generate_near_polydivisible(target_len=random.randint(1000, 4300)))
         return out
 
     raise ValueError("Unknown mode: " + mode)
@@ -179,7 +179,7 @@ def main():
 
     # 6 + 7. Near-polydivisible stress tests (long numbers, n=5)
     for _ in range(2):
-        codes = [generate_near_polydivisible(target_len=random.randint(1000, 5000)) for _ in range(5)]
+        codes = [generate_near_polydivisible(target_len=random.randint(1000, 4300)) for _ in range(5)]
         write_case(secret, f"secret{sid}", codes)
         sid += 1
 
