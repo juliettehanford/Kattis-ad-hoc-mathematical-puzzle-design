@@ -49,12 +49,12 @@ For example:
 
 \section*{Input}
 
-Each input consists of one test case, representing a single secure system. The first line contains an integer $n$ ($1 \le n \le 1\,000$), the number of passcodes in the firewall. Each of the next $n$ lines contains one passcode, a positive integer consisting of between $1$ and $5\,000$ digits (inclusive).
+Each input consists of one test case, representing a single secure system. The first line contains an integer $n$ ($1 \le n \le 1\,000$), the number of passcodes in the firewall. Each of the next $n$ lines contains one passcode, a positive integer consisting of between $1$ and $4\,300$ digits (inclusive).
 
 \section*{Output}
 
-If every passcode line is polydivisible, output that the firewall is secure.  \\
-If the firewall is not secure, print "not secure" followed by each non-polydivisible passcode in the order in which it appears.
+If every passcode line satisfies the cyclic prefix-divisibility rule defined above, output that the firewall is secure.  \\
+If the firewall is not secure, print “not secure” followed by each non cyclic prefix-divisible passcode, in the order in which they appear.
 
 
 \noindent \newline \newline

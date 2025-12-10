@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-
-# This is a sample input validator, written in Python 3.
-
-# Please refer to the comments in README.md for a description of the syntax it
-# is validating. Then, change it as you need.
-
 import sys
 import re
 
@@ -19,7 +12,7 @@ for _ in range(n):
     print(repr(case_line)) # useful for debugging to see where we have read
 
     # each passcode must be a positive integer, 1–25 digits, no leading zeros
-    assert re.match('^[1-9][0-9]{0,4999}\n$', case_line)
+    assert re.match('^[1-9][0-9]{0,4299}\n$', case_line)
 
 # ensure no extra input
 assert sys.stdin.readline() == ''
