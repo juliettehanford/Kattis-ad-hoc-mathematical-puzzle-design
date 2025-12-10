@@ -4,7 +4,6 @@
 \usepackage{graphicx}
 \usepackage{multicol}
 
-% Define \problemname and \illustration if not using Kattis template
 \newcommand{\problemname}[1]{\section*{#1}}
 \newcommand{\illustration}[3]{%
     \begin{figure}[h]
@@ -18,8 +17,12 @@
 
 \problemname{Prefix Firewall}
 
-\illustration{0.3}{problem_statement/firewall_image.png}
-% {Photo by \href{url_here}{link text here, e.g. author name}}
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.3\linewidth]{problem_statement/firewall_image.png}
+    \caption{Illustration}
+    \label{fig:placeholder}
+\end{figure}
 
 \noindent You are a grey-hat hacker trying to identify security vulnerabilities in system firewalls.
 Each system you probe protects itself with a numeric firewall: a list of passcodes, one per line. The system is considered secure only if every passcode satisfies a special cyclic prefix-divisibility rule.
